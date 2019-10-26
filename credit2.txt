@@ -1,0 +1,139 @@
+
+
+commands
+Time goes by.
+
+Time goes by.
+
+Time goes by.
+Time goes by.
+
+
+
+Time goes by.
+
+Customer 1 wants to create an account of type 1. Customer 1 wants to start with 1000000 Tomans.
+
+Time goes by.
+
+Time goes by.
+
+Time goes by.
+
+Time goes by.
+Time goes by.
+
+Time goes by.
+Time goes by.
+
+Time goes by.
+Time goes by.
+
+Time goes by.
+Time goes by.
+
+Time goes by.
+Time goes by.
+
+Time goes by.
+
+
+
+
+
+setup
+
+Account type 1
+
+current-account? false
+bank-fee? 20000 Tomans
+minimum-deposit? 200000 Tomans
+
+
+monthly? true
+
+period? 12 months
+renewable? false
+
+interest-rate? 12 percent
+credit? 250 units
+variability? true
+
+span-for-increase? 20 months
+increase-rate? 1 percent
+
+has-cheque? false
+
+has-card? true
+transfer-fee? 500 Tomans
+
+Account type 2
+
+current-account? false
+bank-fee? 50000 Tomans
+minimum-deposit? 500000 Tomans
+
+
+monthly? false
+
+period? 72 months
+renewable? true
+
+interest-rate? 20 percent
+credit? 400 units
+variability? false
+
+span-for-increase? 550 months
+increase-rate? 10 percent
+
+has-cheque? false
+
+has-card? false
+transfer-fee? 500 Tomans
+
+Account type 3
+
+current-account? true
+bank-fee? 0 Tomans
+minimum-deposit? 10000 Tomans
+
+
+monthly? true
+
+period? 60 months
+renewable? false
+
+interest-rate? 12 percent
+credit? 100 units
+variability? true
+
+span-for-increase? 20 months
+increase-rate? 1 percent
+
+has-cheque? true
+
+has-card? true
+transfer-fee? 500 Tomans
+
+Loan type 1
+loan-amount? 13000000 Tomans
+blocking-money? 5000000 Tomans
+return-span? 48 months
+interest? 24 percent
+
+last-loan? 36 months
+minimum-credit? 375 units
+
+Loan type 2
+
+
+loan-amount? 50000000 Tomans
+
+blocking-money? 30000000 Tomans
+return-span? 24 months
+
+
+interest? 24 percent
+last-loan? 48 months
+
+minimum-credit? 625 units

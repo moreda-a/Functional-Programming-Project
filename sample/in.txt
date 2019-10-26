@@ -1,0 +1,180 @@
+
+
+commands
+Time goes by.
+
+Time goes by.
+
+Time goes by.
+Time goes by.
+
+
+Customer 3 transfers 100000 Tomans.
+
+Time goes by.
+
+
+Customer 3 adds 360000 Tomans to his account.
+Customer 1 wants to create an account of type 3. Customer 1 wants to start with 1200000 Tomans.
+
+Time goes by.
+
+
+
+Time goes by.
+Customer 1 wants to create an account of type 1. Customer 1 wants to start with 510000 Tomans.
+
+
+Time goes by.
+Time goes by.
+
+Time goes by.
+Time goes by.
+Time goes by.
+Customer 2 wants to create an account of type 1. Customer 2 wants to start with 30000 Tomans.
+
+Time goes by.
+Time goes by.
+
+Time goes by.
+Time goes by.
+Time goes by.
+Time goes by.
+
+Time goes by.
+
+
+Time goes by.
+Time goes by.
+
+Customer 1 adds 2600000 Tomans to his account.
+
+Time goes by.
+Time goes by.
+
+
+
+
+
+
+
+Time goes by.
+
+Customer 1 writes a cheque for 200000 Tomans.
+
+Time goes by.
+Time goes by.
+Time goes by.
+Time goes by.
+Time goes by.
+
+
+Customer 1 requests renewal.
+
+Time goes by.
+
+Customer 1 withdraws 340000 Tomans from his account.
+
+Time goes by.
+
+
+Time goes by.
+Time goes by.
+Customer 1 requests a loan of type 2.
+Time goes by.
+Time goes by.
+Time goes by.
+
+Time goes by.
+Time goes by.
+
+Time goes by.
+
+Time goes by.
+
+Customer 1 adds 1300000 Tomans to his account.
+
+Time goes by.
+
+
+Time goes by.
+Time goes by.
+Time goes by.
+
+
+Time goes by.
+Time goes by.
+Time goes by.
+
+
+Customer 1 requests a loan of type 1.
+
+Customer 1 withdraws the loan.
+
+Time goes by.
+Time goes by.
+
+
+Time goes by.
+
+Time goes by.
+
+Time goes by.
+
+Time goes by.
+Time goes by.
+
+Customer 1 pays 1000000 Tomans of his debt.
+
+
+
+setup
+
+Account type 1
+
+current-account? false
+bank-fee? 10000 Tomans
+minimum-deposit? 200000 Tomans
+
+
+monthly? true
+
+period? 72 months
+renewable? true
+
+interest-rate? 12 percent
+credit? 250 units
+variability? true
+
+span-for-increase? 20 months
+increase-rate? 1 percent
+
+has-cheque? false
+
+has-card? true
+transfer-fee? 500 Tomans
+
+
+Loan type 1
+loan-amount? 13000000 Tomans
+blocking-money? 5000000 Tomans
+return-span? 48 months
+interest? 24 percent
+
+last-loan? 36 months
+minimum-credit? 875 units
+
+Loan type 2
+
+
+loan-amount? 50000000 Tomans
+
+blocking-money? 30000000 Tomans
+return-span? 24 months
+
+
+interest? 24 percent
+last-loan? 84 months
+
+minimum-credit? 625 units
+

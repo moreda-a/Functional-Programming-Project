@@ -1,0 +1,203 @@
+#lang racket
+
+(struct account (id accountType balance yearlyMinBal timeOpened [increasingTime #:auto] [potentialRateInc #:auto]) #:mutable #:transparent #:auto-value 0)
+
+(struct accountType (type currentAcc bankFee minDep monthly period renewable intRate credit variable span incRate hasCheque hasCard transFee) #:mutable #:transparent)
+(struct loanType (type amount blockingMoney span interest lastLoan minCredit) #:mutable #:transparent)
+
+(struct customer (num account credit hasAccount lastLoanTime) #:mutable #:transparent)
+
+(define setup `())
+(define commands `())
+
+(define month 0)
+(define accounts `())
+(define customers `())
+(define loanTypes `())
+(define accountTypes `())
+
+(define (searchAccount id accs)
+  (cond
+    [(null? accs) #f]
+    [(eqv? id (account-id (car accs))) (car accs)]
+    [else (searchAccount id (cdr accs))]
+  )
+)
+
+(define (searchCustomer num)
+  (cond
+    [(null? customers) #f]
+    [(eqv? num (customer-num (car customers))) (car customers)]
+    [else (searchCustomer num (cdr customers))]
+  )
+)
+
+(define (searchAccountType type accTypes)
+  (cond
+    [(null? accTypes) #f]
+    [(eqv? type (accountType-type (car accTypes))) (car accTypes)]
+    [else (searchAccountType type (cdr accTypes))]
+  )
+)
+
+(define (validTransaction? acc val)
+  (#t))
+
+(define (changeBalance acc a)
+  (let ([val (account-balance acc)])
+  (if(validTransaction? acc a)
+     (begin (set-account-balance! acc (+ val a)) #t)
+     #f)
+  )
+)
+
+
+(define (openAccount id accType initBalance)
+  (let ([fee (accountType-bankFee accType)]
+        [minBal (accountType-minDep accType)])
+    (let ([newBal (- initBalance fee)])
+      (if(> newBal minBal)
+         (set! commands (append commands (list (account id (struct-copy accountType accType) newBal newBal 0))))
+          #f)
+    )
+  )
+)
+
+(define (requestRenewal id)
+  (let ([acc (searchAccount id)])
+    (let ([accType (searchAccountType (accountType-type acc))])
+      (if(accType)
+         (begin (set-account-timeOpened! acc month) #t)
+         #f)
+    )
+  )
+)
+
+(define (writeCheque id val)
+  (let ([acc (searchAccount id)]
+        [usr (searchCustomer id)])
+    (let ([accType (searchAccountType acc)]
+          [credit (customer-credit usr)])
+    (let ([accCredit (accountType-credit accType)]
+          [minDep (accountType-minDep accType)])
+      (if(acc)
+         (if(> val minDep)
+            (begin (set-account-timeOpened! acc month) #t)
+            #f)
+         (begin (set-customer-credit! usr (- credit (/ accCredit 2))) #t)
+      )
+    )
+    )
+  )
+)
+
+(define (getN lst n)
+  (cond
+    [(null? lst) #f]
+    [(eqv? n 0) (car lst)]
+    [else (getN (cdr lst) (- n 1))]
+  )
+)
+
+(define (getS str n)
+  (getN (string-split (string-replace str "." " ")) n)
+)
+
+
+(define lines (file->lines "sample/1.txt"))
+(define (process lines flag)
+  (cond
+    [(null? lines) #f]
+    [(eqv? (string-length (car lines)) 0) (process (cdr lines) flag)]
+    [(equal? "setup" (car lines)) (process (cdr lines) 0)]
+    [(equal? "commands" (car lines)) (process (cdr lines) 1)]
+    [(eqv? flag 0) (begin (set! setup (append setup (list (car lines)))) (process (cdr lines) 0))]
+    [(eqv? flag 1) (begin (set! commands (append commands (list (car lines)))) (process (cdr lines) 1))]
+  )
+)
+
+(define (processSetup setup)
+  (cond
+    [(null? setup) #f]
+    [(string-prefix? (car setup) "Account")
+     (begin (set! accountTypes (append accountTypes (list (accountType
+                                                           (getS (getN setup 0) 2)
+                                                           (getS (getN setup 1) 1)
+                                                           (getS (getN setup 2) 1)
+                                                           (getS (getN setup 3) 1)
+                                                           (getS (getN setup 4) 1)
+                                                           (getS (getN setup 5) 1)
+                                                           (getS (getN setup 6) 1)
+                                                           (getS (getN setup 7) 1)
+                                                           (getS (getN setup 8) 1)
+                                                           (getS (getN setup 9) 1)
+                                                           (getS (getN setup 10) 1)
+                                                           (getS (getN setup 11) 1)
+                                                           (getS (getN setup 12) 1)
+                                                           (getS (getN setup 13) 1)
+                                                           (getS (getN setup 14) 1)))))
+     (processSetup (cdddr (cdddr (cdddr (cdddr (cdddr setup)))))))]
+    [(string-prefix? (car setup) "Loan")
+     (begin (set! loanTypes (append loanTypes (list (loanType
+                                                           (getS (getN setup 0) 2)
+                                                           (getS (getN setup 1) 1)
+                                                           (getS (getN setup 2) 1)
+                                                           (getS (getN setup 3) 1)
+                                                           (getS (getN setup 4) 1)
+                                                           (getS (getN setup 5) 1)
+                                                           (getS (getN setup 6) 1)))))
+     (processSetup (cdr (cdddr (cdddr setup)))))]
+  )
+)
+
+(define (processCommands command)
+  (cond
+    [(null? command) #f]
+    [(string-prefix? (car command) "Time")
+     (begin (set! month (+ 1 month))
+     (processCommands (cdr commands)))]
+    [(equal? (getS (getN command 0) 2) "wants")
+     (begin (if(not(not(searchAccountType (getS (getN command 0) 9) accountTypes)))
+               (begin (openAccount
+                       (getS (getN command 0) 1)
+                       (searchAccount (getS (getN command 0) 9) accounts)
+                       (getS (getN command 0) 16))
+                      ) #f)
+     (processCommands (last commands)))]
+    [(equal? (getS (getN command 0) 2) "adds")
+     (begin (set! month (+ 1 month))
+     (processCommands (last commands)))]
+    [(equal? (getS (getN command 0) 2) "requests")
+     (begin (set! month (+ 1 month))
+     (processCommands (last commands)))]
+    [(equal? (getS (getN command 0) 2) "writes")
+     (begin (set! month (+ 1 month))
+     (processCommands (last commands)))]
+    [(equal? (getS (getN command 0) 2) "spends")
+     (begin (set! month (+ 1 month))
+     (processCommands (last commands)))]
+    [(equal? (getS (getN command 0) 2) "transfers")
+     (begin (set! month (+ 1 month))
+     (processCommands (last commands)))]
+    [(equal? (getS (getN command 0) 2) "withdraws")
+     (begin (set! month (+ 1 month))
+     (processCommands (last commands)))]
+    [(equal? (getS (getN command 0) 2) "closes")
+     (begin (set! month (+ 1 month))
+     (processCommands (last commands)))]
+    [(equal? (getS (getN command 0) 2) "requests")
+     (begin (set! month (+ 1 month))
+     (processCommands (last commands)))]
+    [(equal? (getS (getN command 0) 2) "pays")
+     (begin (set! month (+ 1 month))
+     (processCommands (last commands)))]
+    [(equal? (getS (getN command 0) 2) "withdraws")
+     (begin (set! month (+ 1 month))
+     (processCommands (last commands)))]
+  )
+)
+
+(process lines 0)
+(processSetup setup)
+(processCommands commands)
+(displayln accounts)
